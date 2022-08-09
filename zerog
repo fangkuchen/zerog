@@ -1,0 +1,77 @@
+#!/bin/bash
+
+### VARIABLES ###
+
+script_dir="$(dirname "$(realpath $0)")"
+progs="$script_dir/progs.list"
+dotfiles="git://git.cybvik.xyz/dotfiles"
+name="$(logname)"
+src="/home/$name/.local/src"
+giturl="git://git.cybvik.xyz"
+
+### FUNCTIONS ###
+
+warning() {
+    printf "WARNING: $1\n" >> "$logfile"
+}
+
+error() {
+    printf "ERROR: $1\n" >> "$logfile"
+    clear
+    printf "Error: Please check $logfile for more info"
+    exit 1
+}
+
+prepare() {
+    pacman -S --noconfirm --needed git zsh ca-certificates >/dev/null 2>&1
+    grep -q "ILoveCandy" /etc/pacman.conf || 
+	sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+    sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
+}
+
+install_programs() {
+    while read -r program; do
+	printf "Installing $program\n"
+        pacman -S --noconfirm --needed  "$program" >/dev/null 2>&1 ||
+	    warning "$program"
+    done < "$progs"
+}
+
+get_dotfiles() {
+    printf "### Installing dotfiles ###\n"
+    sudo -u "$name" git clone "$dotfiles" /tmp/dotfiles >/dev/null
+    sudo -u "$name" cp -rfT /tmp/dotfiles "/home/$name"
+}
+
+suckless() {
+    [ -d "$src" ] || mkdir -p "$src"
+    cd "$src" && printf "### Installing suckless software ###\n"
+    for program in dwm st dmenu slock; do
+	sudo -u "$name" git clone "$giturl/$program" >/dev/null
+	cd "$program" && make clean install
+	cd "$src"
+    done
+}
+
+follow_up() {
+    chsh -s /bin/zsh "$name" >/dev/null 2>&1
+    sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
+    sudo -u "$name" mkdir -p "/home/$name/.config/mpd/playlists/"
+    rmmod pcspkr
+    printf "blacklist pcspkr\n" >/etc/modprobe.d/nobeep.conf
+}
+
+### SCRIPT ###
+
+printf  "###########################\n########## ZEROG ##########\n###########\
+################\n"
+
+prepare || error "prepare failed"
+
+install_programs || error "install_programs failed"
+
+get_dotfiles || error "get_dotfiles failed"
+
+suckless || error "suckless failed"
+
+follow_up || error "follow_up failed"

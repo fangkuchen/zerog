@@ -1,0 +1,29 @@
+ZEROG
+=====
+Simple Parabola GNU/Linux-libre post-install script
+
+Dependencies
+------------
+This script requires git and base-devel packages
+
+Usage
+-----
+Install Parabola on your system then run:
+
+    git clone git://git.cybvik.xyz/zerog
+    cd zerog
+    chmod +x zerog.sh
+    sudo ./zerog.sh
+
+Customization
+-------------
+You can change the source for the progs.list, the dotfiles and suckless repo by
+editing the corresponding variables at the beginning of the script
+
+Contact
+-------
+You can report issues and contributions to zerog@cybvik.xyz
+
+Credits
+-------
+This script is heavily inspired by LARBS <larbs.xyz>
