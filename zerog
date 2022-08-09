@@ -8,6 +8,7 @@ dotfiles="git://git.cybvik.xyz/dotfiles"
 name="$(logname)"
 src="/home/$name/.local/src"
 giturl="git://git.cybvik.xyz"
+logfile="/tmp/zerog.log"
 
 ### FUNCTIONS ###
 
