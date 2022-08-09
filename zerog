@@ -68,6 +68,7 @@ follow_up() {
     sudo -u "$name" mkdir -p "/home/$name/.config/mpd/playlists/"
     rmmod pcspkr
     printf "blacklist pcspkr\n" >/etc/modprobe.d/nobeep.conf
+    yes | rm /home/$name/.bash*
 }
 
 ### SCRIPT ###
