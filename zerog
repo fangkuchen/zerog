@@ -24,7 +24,9 @@ error() {
 }
 
 prepare() {
-    pacman -S --noconfirm --needed git zsh ca-certificates >/dev/null 2>&1
+    printf "Preparing...\n"
+    pacman -S --noconfirm --needed git zsh ca-certificates >/dev/null 2>&1 ||
+	{ warning "Initial installs failed"; return 1; }
     grep -q "ILoveCandy" /etc/pacman.conf || 
 	sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
     sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
@@ -34,7 +36,7 @@ install_programs() {
     while read -r program; do
 	printf "Installing $program\n"
         pacman -S --noconfirm --needed  "$program" >/dev/null 2>&1 ||
-	    warning "$program"
+	    { warning "$program"; return 1; }
     done < "$progs"
 }
 
@@ -46,11 +48,14 @@ get_dotfiles() {
 
 suckless() {
     [ -d "$src" ] || sudo -u "$name" mkdir -p "$src"
-    cd "$src" && printf "### Installing suckless software ###\n"
+    printf "### Installing suckless software ###\n"
     for program in dwm st dmenu slock; do
-	sudo -u "$name" git clone "$giturl/$program" >/dev/null
-	cd "$program" && make clean install
 	cd "$src"
+	printf "Installing $program\n"
+	sudo -u "$name" git clone "$giturl/$program" >/dev/null 2>&1 ||
+	    { warning "Could not clone $program"; return 1; }
+	cd "$program" && make clean install >/dev/null 2>&1 || 
+	    { warning "Could not install $program"; return 1; }
     done
 }
 
@@ -67,12 +72,13 @@ follow_up() {
 printf  "###########################\n########## ZEROG ##########\n###########\
 ################\n"
 
-prepare || error "prepare failed"
+prepare || error "Please make sure that you have a working internet connection\
+ and you run ZEROG with sudo!"
 
-install_programs || error "install_programs failed"
+install_programs || error "Error during installation from progs.list"
 
-get_dotfiles || error "get_dotfiles failed"
+get_dotfiles || error "Could not install dotfiles"
 
-suckless || error "suckless failed"
+suckless || error "Could not install suckless programs"
 
-follow_up || error "follow_up failed"
+follow_up || error "Follow up function failed"
