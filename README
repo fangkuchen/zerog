@@ -12,8 +12,8 @@ Install Parabola on your system then run:
 
     git clone git://git.cybvik.xyz/zerog
     cd zerog
-    chmod +x zerog.sh
-    sudo ./zerog.sh
+    chmod +x zerog
+    sudo ./zerog
 
 Customization
 -------------
