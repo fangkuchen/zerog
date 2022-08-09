@@ -3,9 +3,9 @@
 ### VARIABLES ###
 
 script_dir="$(dirname "$(realpath $0)")"
+name="$(logname)"
 progs="$script_dir/progs.list"
 dotfiles="git://git.cybvik.xyz/dotfiles"
-name="$(logname)"
 src="/home/$name/.local/src"
 giturl="git://git.cybvik.xyz"
 logfile="/tmp/zerog.log"
@@ -45,7 +45,7 @@ get_dotfiles() {
 }
 
 suckless() {
-    [ -d "$src" ] || mkdir -p "$src"
+    [ -d "$src" ] || sudo -u "$name" mkdir -p "$src"
     cd "$src" && printf "### Installing suckless software ###\n"
     for program in dwm st dmenu slock; do
 	sudo -u "$name" git clone "$giturl/$program" >/dev/null
