@@ -86,7 +86,7 @@ follow_up() {
 
 ### SCRIPT ###
 
-printf  "###########################\n########## ZEROG ##########\n###########\
+printf "###########################\n########## ZEROG ##########\n###########\
 ################\n"
 
 prepare || error "Please make sure that you have a working internet connection\
@@ -98,4 +98,11 @@ get_dotfiles || error "Could not install dotfiles"
 
 suckless || error "Could not install suckless programs"
 
+install_libxft-bgra || error "Could not install libxft-bgra"
+
 follow_up || error "Follow up function failed"
+
+printf "###########################\n########## ZEROG ##########\n###########\
+################\nZEROG flight finished. Log in again and run 'startx' to start
+ your new system\nIf you liked this script, want to report bugs/issues or \
+contribute to it, let me know via mail <zerog@cybvik.xyz>\n"
