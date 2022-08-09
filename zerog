@@ -61,6 +61,19 @@ suckless() {
     done
 }
 
+install_libxft-bgra() {
+    printf "### Installing libxft-bgra for emoji support <3 ###\n"
+    cd /tmp
+    sudo -u "$name" git clone https://github.com/uditkarode/libxft-bgra ||
+	{ warning "Could not clone libxft-bgra"; return 1; }
+    cd libxft-bgra
+    sudo -u "$name" sh autogen.sh --sysconfdir=/etc --prefix=/usr \
+	--mandir=/usr/share/man ||
+	{ warning "Could not run autgen.sh"; return 1; }
+    make install ||
+	{ warning "Could not make install"; return 1; }
+}
+
 follow_up() {
     printf "### Finishing touches ###\n"
     chsh -s /bin/zsh "$name" >/dev/null 2>&1
