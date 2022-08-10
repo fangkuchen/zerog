@@ -12,6 +12,10 @@ logfile="/tmp/zerog.log"
 
 ### FUNCTIONS ###
 
+task_complete() {
+    printf "COMPLETE: $1 completed!\n" > "$logfile"
+}
+
 warning() {
     printf "WARNING: $1\n" >> "$logfile"
 }
@@ -89,18 +93,30 @@ follow_up() {
 printf "###########################\n########## ZEROG ##########\n###########\
 ################\n"
 
-prepare || error "Please make sure that you have a working internet connection\
- and you run ZEROG with sudo!"
+prepare &&
+    task_complete "prepare()" || 
+    error "Please make sure that you have a working internet connection and \
+you run ZEROG with sudo!"
 
-install_programs || error "Error during installation from progs.list"
+install_programs &&
+    task_complete "install_programs()" || 
+    error "Error during installation from progs.list"
 
-get_dotfiles || error "Could not install dotfiles"
+get_dotfiles &&
+    task_complete "get_dotfiles()" ||
+    error "Could not install dotfiles"
 
-suckless || error "Could not install suckless programs"
+suckless &&
+    task_complete "suckless()" || 
+    error "Could not install suckless programs"
 
-install_libxft-bgra || error "Could not install libxft-bgra"
+install_libxft-bgra &&
+    task_complete "install_libxft-bgra()" || 
+    error "Could not install libxft-bgra"
 
-follow_up || error "Follow up function failed"
+follow_up &&
+    task_complete "follow_up" || 
+    error "Follow up function failed"
 
 printf "###########################\n########## ZEROG ##########\n###########\
 ################\nZEROG flight finished. Log in again and run 'startx' to start
