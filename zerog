@@ -9,6 +9,7 @@ dotfiles="git://git.cybvik.xyz/dotfiles"
 src="/home/$name/.local/src"
 giturl="git://git.cybvik.xyz"
 logfile="/tmp/zerog.log"
+libxftrepo="https://github.com/uditkarode/libxft-bgra"
 
 ### FUNCTIONS ###
 
@@ -68,13 +69,13 @@ suckless() {
 install_libxft-bgra() {
     printf "### Installing libxft-bgra for emoji support <3 ###\n"
     cd /tmp
-    sudo -u "$name" git clone https://github.com/uditkarode/libxft-bgra ||
+    sudo -u "$name" git clone "$libxftrepo" >/dev/null 2>&1 ||
 	{ warning "Could not clone libxft-bgra"; return 1; }
     cd libxft-bgra
     sudo -u "$name" sh autogen.sh --sysconfdir=/etc --prefix=/usr \
-	--mandir=/usr/share/man ||
+	--mandir=/usr/share/man >/dev/null 2>&1 ||
 	{ warning "Could not run autgen.sh"; return 1; }
-    make install ||
+    make install >/dev/null 2>&1 ||
 	{ warning "Could not make install"; return 1; }
 }
 
