@@ -120,6 +120,6 @@ follow_up &&
     error "Follow up function failed"
 
 printf "###########################\n########## ZEROG ##########\n###########\
-################\nZEROG flight finished. Log in again and run 'startx' to start
- your new system\nIf you liked this script, want to report bugs/issues or \
-contribute to it, let me know via mail <zerog@cybvik.xyz>\n"
+################\nZEROG flight finished. Log in again and run 'startx' to \
+start your new system\nIf you liked this script, want to report bugs/issues \
+or contribute to it, let me know via mail <zerog@cybvik.xyz>\n"
