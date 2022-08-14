@@ -5,11 +5,11 @@
 script_dir="$(dirname "$(realpath $0)")"
 name="$(logname)"
 progs="$script_dir/progs.list"
-dotfiles="git://git.cybvik.xyz/dotfiles"
+dotfiles="git://cybvik.xyz/dotfiles"
 src="/home/$name/.local/src"
-giturl="git://git.cybvik.xyz"
+giturl="git://cybvik.xyz"
 logfile="/tmp/zerog.log"
-libxftrepo="https://github.com/uditkarode/libxft-bgra"
+libxftrepo="https://aur.archlinux.org/libxft-bgra.git'
 
 ### FUNCTIONS ###
 
