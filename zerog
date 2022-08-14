@@ -72,7 +72,8 @@ install_libxft-bgra() {
     sudo -u "$name" git clone "$libxftrepo" >/dev/null 2>&1 ||
 	{ warning "Could not clone libxft-bgra"; return 1; }
     cd libxft-bgra
-    yes | sudo -u "$name" makepkg -si
+    yes | sudo -u "$name" makepkg -si >/dev/null 2>&1 ||
+	{ warning "Could not makepkg libxft-bgra"; return 1; }
 }
 
 follow_up() {
