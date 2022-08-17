@@ -94,6 +94,9 @@ follow_up() {
     rmmod pcspkr
     printf "blacklist pcspkr\n" >/etc/modprobe.d/nobeep.conf
     yes | rm /home/$name/.bash*
+    rc-update add avahi-daemon default >/dev/null
+    rc-update add cupsd default >/dev/null
+    rc-update add tor default >/dev/null
 }
 
 ### SCRIPT ###
