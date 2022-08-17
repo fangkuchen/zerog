@@ -6,6 +6,7 @@ script_dir="$(dirname "$(realpath $0)")"
 name="$(logname)"
 progs="$script_dir/progs.list"
 dotfiles="git://cybvik.xyz/dotfiles"
+scripts="git://cybvik.xyz/scripts"
 src="/home/$name/.local/src"
 giturl="git://cybvik.xyz"
 logfile="/tmp/zerog.log"
@@ -51,6 +52,15 @@ get_dotfiles() {
     sudo -u "$name" git clone "$dotfiles" /tmp/dotfiles >/dev/null 2>&1 ||
 	{ warning "Could not clone dotfiles"; return 1; }
     sudo -u "$name" cp -rfT /tmp/dotfiles "/home/$name" >/dev/null 2>&1
+}
+
+get_scripts() {
+    printf "### Download script collection ###\n"
+    sudo -u "$name" git clone "$scripts" "/tmp/scripts" >/dev/null 2>&1 ||
+	{ warning "Could not clone scripts"; return 1; }
+    sudo -u "$name" mkdir -p "/home/$name/.local/bin"
+    sudo -u "$name" cp -rfT /tmp/scripts/* "/home/$name/.local/bin/"\
+	>/dev/null 2>&1
 }
 
 suckless() {
@@ -103,6 +113,10 @@ install_programs &&
 get_dotfiles &&
     task_complete "get_dotfiles()" ||
     error "Could not install dotfiles"
+
+get_scripts &&
+    task_complete "get_scripts()" ||
+    error "Could not download scripts"
 
 suckless &&
     task_complete "suckless()" || 
