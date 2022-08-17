@@ -1,5 +1,6 @@
 xorg
 xorg-xinit
+xorg-drivers
 xclip
 xcape
 xdotool
@@ -19,7 +20,6 @@ exfat-utils
 moreutils
 sxiv
 ffmpeg
-gnome-keyring
 neovim
 mpd
 mpc
@@ -44,5 +44,20 @@ borg
 neofetch
 htop
 icecat
+tor
 wget
 rsync
+curl
+isync
+msmtp
+pass
+hplip
+system-config-printer
+cups
+cups-openrc
+avahi
+avahi-openrc
+iceweasel
+iceweasel-ublock-origin
+iceweasel-noscript
+openssh
