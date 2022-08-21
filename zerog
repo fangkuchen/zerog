@@ -28,8 +28,10 @@ error() {
 }
 
 prepare() {
-    printf "Preparing...\n"
+    printf "Preparing (This might take a while)...\n"
     pacman -S --noconfirm --needed git zsh ca-certificates >/dev/null 2>&1 ||
+	pacman-key --refresh &&
+	pacman -S --noconfirm --needed git zsh ca-certificates >/dev/null 2>&1 ||
 	{ warning "Initial installs failed"; return 1; }
     grep -q "ILoveCandy" /etc/pacman.conf || 
 	sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
