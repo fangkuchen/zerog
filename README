@@ -4,16 +4,16 @@ Simple Parabola GNU/Linux-libre post-install script
 
 Dependencies
 ------------
-This script requires git and base-devel packages
+This script is written for the OpenRC version of Parabola. It assumes that
+the nonsystemd repo is already enabled and elogind/libelogind is installed.
 
 Usage
 -----
 Install Parabola on your system then run:
 
     git clone git://git.cybvik.xyz/zerog
-    cd zerog
-    chmod +x zerog
-    sudo ./zerog
+    chmod +x zerog/zerog
+    sudo zerog/zerog
 
 Customization
 -------------
