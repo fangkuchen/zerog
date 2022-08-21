@@ -43,6 +43,7 @@ neofetch
 htop
 icecat
 tor
+tor-openrc
 wget
 rsync
 curl
