@@ -1,14 +1,12 @@
 xorg
 xorg-xinit
-xorg-drivers
 xclip
 xcape
 xdotool
-xorg-util-macros
 xcompmgr
 xwallpaper
 unzip
-ttf-liberation
+ttf-ibm-plex
 ueberzug
 sxhkd
 bc
@@ -61,3 +59,4 @@ iceweasel
 iceweasel-ublock-origin
 iceweasel-noscript
 openssh
+texlive
