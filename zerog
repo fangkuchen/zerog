@@ -6,17 +6,15 @@ script_dir="$(dirname "$(realpath $0)")"
 name="$(logname)"
 progs="$script_dir/progs.list"
 dotfiles="git://cybvik.xyz/dotfiles"
-scripts="git://cybvik.xyz/scripts"
 src="/home/$name/.local/src"
 giturl="git://cybvik.xyz"
 logfile="/tmp/zerog.log"
-libxftrepo="https://aur.archlinux.org/libxft-bgra.git'
+
+# Repos for programs not available in Parabola repos
+mwrepo="https://aur.archlinux.org/mutt-wizard-git.git"
+libxftrepo="https://aur.archlinux.org/libxft-bgra.git"
 
 ### FUNCTIONS ###
-
-task_complete() {
-    printf "COMPLETE: $1 completed!\n" > "$logfile"
-}
 
 warning() {
     printf "WARNING: $1\n" >> "$logfile"
@@ -25,7 +23,7 @@ warning() {
 error() {
     printf "ERROR: $1\n" >> "$logfile"
     clear
-    printf "Error: Please check $logfile for more info\n"
+    printf "Error: $1\n"
     exit 1
 }
 
@@ -54,15 +52,6 @@ get_dotfiles() {
     sudo -u "$name" cp -rfT /tmp/dotfiles "/home/$name" >/dev/null 2>&1
 }
 
-get_scripts() {
-    printf "### Download script collection ###\n"
-    sudo -u "$name" git clone "$scripts" "/tmp/scripts" >/dev/null 2>&1 ||
-	{ warning "Could not clone scripts"; return 1; }
-    sudo -u "$name" mkdir -p "/home/$name/.local/bin"
-    sudo -u "$name" cp -rfT /tmp/scripts/* "/home/$name/.local/bin/"\
-	>/dev/null 2>&1
-}
-
 suckless() {
     [ -d "$src" ] || sudo -u "$name" mkdir -p "$src"
     printf "### Installing suckless software ###\n"
@@ -76,14 +65,13 @@ suckless() {
     done
 }
 
-install_libxft-bgra() {
-    printf "### Installing libxft-bgra for emoji support <3 ###\n"
-    cd /opt
-    sudo -u "$name" git clone "$libxftrepo" >/dev/null 2>&1 ||
-	{ warning "Could not clone libxft-bgra"; return 1; }
-    cd libxft-bgra
-    yes | sudo -u "$name" makepkg -si >/dev/null 2>&1 ||
-	{ warning "Could not makepkg libxft-bgra"; return 1; }
+git_install() {
+    printf "### Installing $1 ###\n"
+    sudo -u "$name" git clone "$2" /tmp/"$1" >/dev/null 2>&1 ||
+	{ warning "Could not clone $1"; return 1; }
+    cd /tmp/"$1"
+    sudo -u "$name" makepkg -si >/dev/null 2>&1 ||
+	{ warning "Could not makepkg $1"; return 1; }
 }
 
 follow_up() {
@@ -104,33 +92,25 @@ follow_up() {
 printf "###########################\n########## ZEROG ##########\n###########\
 ################\n"
 
-prepare &&
-    task_complete "prepare()" || 
+prepare ||
     error "Please make sure that you have a working internet connection and \
 you run ZEROG with sudo!"
 
-install_programs &&
-    task_complete "install_programs()" || 
+install_programs ||
     error "Error during installation from progs.list"
 
-get_dotfiles &&
-    task_complete "get_dotfiles()" ||
+get_dotfiles ||
     error "Could not install dotfiles"
 
-get_scripts &&
-    task_complete "get_scripts()" ||
-    error "Could not download scripts"
-
-suckless &&
-    task_complete "suckless()" || 
+suckless ||
     error "Could not install suckless programs"
 
-install_libxft-bgra &&
-    task_complete "install_libxft-bgra()" || 
-    error "Could not install libxft-bgra"
+# Git installs are disabled by default so you can choose if you want to install
+# these packages from the AUR
+# git_install libxft-bgra "$libxftrepo" || error "Could not install libxft-bgra"
+# git_install mutt-wizard "$mwrepo" || error "Could not install mutt-wizard"
 
-follow_up &&
-    task_complete "follow_up" || 
+follow_up ||
     error "Follow up function failed"
 
 printf "###########################\n########## ZEROG ##########\n###########\
