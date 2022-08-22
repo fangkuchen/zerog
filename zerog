@@ -13,6 +13,7 @@ logfile="/tmp/zerog.log"
 # Repos for programs not available in Parabola repos
 mwrepo="https://aur.archlinux.org/mutt-wizard-git.git"
 libxftrepo="https://aur.archlinux.org/libxft-bgra.git"
+syntaxrepo="https://aur.archlinux.org/zsh-fast-syntax-highlighting.git"
 
 ### FUNCTIONS ###
 
@@ -115,8 +116,12 @@ suckless ||
 # Git installs are disabled by default so you can choose if you want to install
 # these packages from the AUR
 #
-# git_install libxft-bgra "$libxftrepo" || error "Could not install libxft-bgra"
-# git_install mutt-wizard "$mwrepo" || error "Could not install mutt-wizard"
+# git_install libxft-bgra "$libxftrepo" ||
+# 	error "Could not install libxft-bgra"
+# git_install mutt-wizard "$mwrepo" ||
+# 	warning "Could not install mutt-wizard"
+# git_install zsh-fast-syntax-highlighting "$syntaxrepo" || 
+# 	warning "Could not install zsh-fast-syntax-highlighting"
 
 follow_up ||
     error "Follow up function failed"
