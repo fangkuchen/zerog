@@ -27,14 +27,24 @@ error() {
     exit 1
 }
 
+install_keys() {
+    pacman -S --noconfirm --needed archlinux-keyring archlinuxarm-keyring \
+	parabola-keyring >/dev/null 2>&1 ||
+	{ warning "Could not install keyrings"; return 1; }
+}
+
+refresh_keys() {
+    pacman-key --refresh >/dev/null 2>&1 ||
+	{ warning "Could not refresh keys"; return 1; }
+}
+    
 prepare() {
-    printf "Preparing (This might take a while)...\n"
-    yes | pacman -Sy archliux-keyring archlinuxarm-keyring parabola-keyring \
-	>/dev/null 2>&1 ||
-	pacman-key --refresh >/dev/null 2>&1 &&
-	yes | pacman -Sy archliux-keyring archlinuxarm-keyring parabola-keyring \
-	>/dev/null 2>&1 ||
-	{ warning "Could not update keyrings"; return 1; }
+    printf "Preparing...\n"
+    printf "Installing keys...\n"
+    install_keys ||
+	{ printf "Refreshing keys (This will take a while!)...\n"
+          refresh_keys; } || { warning "Could not refresh keys"; return 1; }
+    install_keys || { warning "Could not install keys"; return 1; }
 
     pacman -S --noconfirm --needed git zsh ca-certificates >/dev/null 2>&1 ||
 	{ warning "Initial installs failed"; return 1; }
