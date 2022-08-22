@@ -88,7 +88,7 @@ git_install() {
     sudo -u "$name" git clone "$2" /tmp/"$1" >/dev/null 2>&1 ||
 	{ warning "Could not clone $1"; return 1; }
     cd /tmp/"$1"
-    sudo -u "$name" makepkg -si >/dev/null 2>&1 ||
+    yes | sudo -u "$name" makepkg -si >/dev/null 2>&1 ||
 	{ warning "Could not makepkg $1"; return 1; }
 }
 
@@ -125,6 +125,7 @@ suckless ||
 
 # Git installs are disabled by default so you can choose if you want to install
 # these packages from the AUR
+#
 # git_install libxft-bgra "$libxftrepo" || error "Could not install libxft-bgra"
 # git_install mutt-wizard "$mwrepo" || error "Could not install mutt-wizard"
 
