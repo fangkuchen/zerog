@@ -31,7 +31,7 @@ prepare() {
     printf "Refreshing keys...\n(This will take a while!)\n"
     pacman-key --refresh >/dev/null 2>&1 ||
 	{ warning "Could not refresh keys"; return 1; }
-    pacman -Sy --noconfirm --needed archlinux-keyring archlinuxarm-keyring \
+    pacman -Sy --noconfirm archlinux-keyring archlinuxarm-keyring \
 	parabola-keyring >/dev/null 2>&1 ||
 	{ warning "Could not install keyrings"; return 1; }
 
@@ -77,7 +77,7 @@ git_install() {
     sudo -u "$name" git clone "$2" /tmp/"$1" >/dev/null 2>&1 ||
 	{ warning "Could not clone $1"; return 1; }
     cd /tmp/"$1"
-    yes | sudo -u "$name" makepkg -si >/dev/null 2>&1 ||
+    yes | sudo -u "$name" LANG=C makepkg -si >/dev/null 2>&1 ||
 	{ warning "Could not makepkg $1"; return 1; }
 }
 
