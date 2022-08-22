@@ -31,7 +31,7 @@ prepare() {
     printf "Preparing (This might take a while)...\n"
     yes | pacman -Sy archliux-keyring archlinuxarm-keyring parabola-keyring \
 	>/dev/null 2>&1 ||
-	pacman-key --refresh &&
+	pacman-key --refresh >/dev/null 2>&1 &&
 	yes | pacman -Sy archliux-keyring archlinuxarm-keyring parabola-keyring \
 	>/dev/null 2>&1 ||
 	{ warning "Could not update keyrings"; return 1; }
