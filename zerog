@@ -10,57 +10,58 @@ src="/home/$name/.local/src"
 giturl="git://cybvik.xyz"
 logfile="/tmp/zerog.log"
 
-# Repos for programs not available in Parabola repos
+# Repos for AUR programs
 mwrepo="https://aur.archlinux.org/mutt-wizard-git.git"
 libxftrepo="https://aur.archlinux.org/libxft-bgra.git"
 syntaxrepo="https://aur.archlinux.org/zsh-fast-syntax-highlighting.git"
 
 ### FUNCTIONS ###
 
-warning() {
+warning() { # Write to logfile
     printf "WARNING: $1\n" >> "$logfile"
 }
 
-error() {
+error() { # Write to logfile and exit script
     printf "ERROR: $1\n" >> "$logfile"
     clear
     printf "Error: $1\n"
     exit 1
 }
-prepare() {
+prepare() { 
     printf "Preparing...\n"
     printf "Refreshing keys...\n(This will take a while!)\n"
+    # Refresh keyring and update keyrings
     pacman-key --refresh >/dev/null 2>&1 ||
 	{ warning "Could not refresh keys"; return 1; }
     pacman -Sy --noconfirm archlinux-keyring archlinuxarm-keyring \
 	parabola-keyring >/dev/null 2>&1 ||
 	{ warning "Could not install keyrings"; return 1; }
-
+    # Install some essential programs
     pacman -S --noconfirm --needed git zsh ca-certificates >/dev/null 2>&1 ||
 	{ warning "Initial installs failed"; return 1; }
-
+    # Enable parallel downloads and make pacman look nice
     grep -q "ILoveCandy" /etc/pacman.conf || 
 	sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
     sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
 }
 
-install_programs() {
+install_programs() { # Read from progs.list and install each entry
     printf "### Installing from progs.list ###\n"
     while read -r program; do
 	printf "Installing $program\n"
         pacman -S --noconfirm --needed  "$program" >/dev/null 2>&1 ||
-	    { warning "$program"; return 1; }
+	    warning "$program could not be installed"
     done < "$progs"
 }
 
-get_dotfiles() {
+get_dotfiles() { # Download dotfiles and place them in $HOME
     printf "### Installing dotfiles ###\n"
     sudo -u "$name" git clone "$dotfiles" /tmp/dotfiles >/dev/null 2>&1 ||
 	{ warning "Could not clone dotfiles"; return 1; }
     sudo -u "$name" cp -rfT /tmp/dotfiles "/home/$name" >/dev/null 2>&1
 }
 
-suckless() {
+suckless() { # Clone and install suckless programs
     [ -d "$src" ] || sudo -u "$name" mkdir -p "$src"
     printf "### Installing suckless software ###\n"
     for program in dwm st dmenu slock; do
@@ -73,7 +74,7 @@ suckless() {
     done
 }
 
-git_install() {
+git_install() { # Basically a temporary AUR helper
     printf "### Installing $1 ###\n"
     sudo -u "$name" git clone "$2" /tmp/"$1" >/dev/null 2>&1 ||
 	{ warning "Could not clone $1"; return 1; }
@@ -84,15 +85,21 @@ git_install() {
 
 follow_up() {
     printf "### Finishing touches ###\n"
+    # Make zsh the default shell
     chsh -s /bin/zsh "$name" >/dev/null 2>&1
+    # Create some needed dirs
     sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
     sudo -u "$name" mkdir -p "/home/$name/.config/mpd/playlists/"
+    # Turn off the computer beep
     rmmod pcspkr
     printf "blacklist pcspkr\n" >/etc/modprobe.d/nobeep.conf
+    # Get rid of no longer needed bash files
     yes | rm /home/$name/.bash*
+    # Add some services to default runtime
     rc-update add avahi-daemon default >/dev/null
     rc-update add cupsd default >/dev/null
     rc-update add tor default >/dev/null
+    # Make IBM Plex Mono the default monospace font
     sed -i 's/Noto Sans Mono/IBM Plex Mono/g' /etc/fonts/conf.d/60-latin.conf
 }
 
@@ -105,8 +112,7 @@ prepare ||
     error "Please make sure that you have a working internet connection and \
 you run ZEROG with sudo!"
 
-install_programs ||
-    error "Error during installation from progs.list"
+install_programs
 
 get_dotfiles ||
     error "Could not install dotfiles"
