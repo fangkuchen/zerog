@@ -93,6 +93,7 @@ follow_up() {
     rc-update add avahi-daemon default >/dev/null
     rc-update add cupsd default >/dev/null
     rc-update add tor default >/dev/null
+    sed -i 's/Noto Sans Mono/IBM Plex Mono/g' /etc/fonts/conf.d/60-latin.conf
 }
 
 ### SCRIPT ###
