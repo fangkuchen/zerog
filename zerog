@@ -75,12 +75,11 @@ suckless() { # Clone and install suckless programs
 }
 
 git_install() { # Basically a temporary AUR helper
-    printf "### Installing $1 ###\n"
     sudo -u "$name" git clone "$2" /tmp/"$1" >/dev/null 2>&1 ||
-	{ warning "Could not clone $1"; return 1; }
+	{ warning "Could not clone from AUR ($2)"; return 1; }
     cd /tmp/"$1"
     yes | sudo -u "$name" LANG=C makepkg -si >/dev/null 2>&1 ||
-	{ warning "Could not makepkg $1"; return 1; }
+	{ warning "Could not makepkg $2"; return 1; }
 }
 
 follow_up() {
@@ -123,12 +122,9 @@ suckless ||
 # Git installs are disabled by default so you can choose if you want to install
 # these packages from the AUR
 #
-# git_install libxft-bgra "$libxftrepo" ||
-# 	error "Could not install libxft-bgra"
-# git_install mutt-wizard "$mwrepo" ||
-# 	warning "Could not install mutt-wizard"
-# git_install zsh-fast-syntax-highlighting "$syntaxrepo" || 
-# 	warning "Could not install zsh-fast-syntax-highlighting"
+# for repo in "$libxftrepo" "$mwrepo" "$syntaxrepo"; do
+#     git_install "$repo"
+# done
 
 follow_up ||
     error "Follow up function failed"
