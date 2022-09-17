@@ -5,9 +5,9 @@
 script_dir="$(dirname "$(realpath $0)")"
 name="$(logname)"
 progs="$script_dir/progs.list"
-dotfiles="git://cybvik.xyz/dotfiles"
+dotfiles="git://git.cybvik.xyz/dotfiles"
 src="/home/$name/.local/src"
-giturl="git://cybvik.xyz"
+giturl="git://git.cybvik.xyz"
 logfile="/tmp/zerog.log"
 
 # Repos for AUR programs
@@ -67,7 +67,7 @@ suckless() { # Clone and install suckless programs
     for program in dwm st dmenu slock; do
 	cd "$src"
 	printf "Installing $program\n"
-	sudo -u "$name" git clone "$giturl/$program" >/dev/null 2>&1 ||
+	sudo -u "$name" git clone "$giturl/$program-cybvik" >/dev/null 2>&1 ||
 	    { warning "Could not clone $program"; return 1; }
 	cd "$program" && make clean install >/dev/null 2>&1 || 
 	    { warning "Could not install $program"; return 1; }
