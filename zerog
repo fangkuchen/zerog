@@ -12,7 +12,6 @@ logfile="/tmp/zerog.log"
 
 # Repos for AUR programs
 mwrepo="https://aur.archlinux.org/mutt-wizard-git.git"
-libxftrepo="https://aur.archlinux.org/libxft-bgra.git"
 syntaxrepo="https://aur.archlinux.org/zsh-fast-syntax-highlighting.git"
 
 ### FUNCTIONS ###
@@ -62,7 +61,6 @@ get_dotfiles() { # Download dotfiles and place them in $HOME
 }
 
 suckless() { # Clone and install suckless programs
-    [ -d "$src" ] || sudo -u "$name" mkdir -p "$src"
     printf "### Installing suckless software ###\n"
     for program in dwm st dmenu slock; do
 	cd "$src"
@@ -122,7 +120,7 @@ suckless ||
 # Git installs are disabled by default so you can choose if you want to install
 # these packages from the AUR
 #
-# for repo in "$libxftrepo" "$mwrepo" "$syntaxrepo"; do
+# for repo in "$mwrepo" "$syntaxrepo"; do
 #     git_install "$repo"
 # done
 
