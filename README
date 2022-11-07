@@ -11,9 +11,9 @@ Usage
 -----
 Install Parabola on your system then run:
 
-    git clone git://git.cybvik.xyz/zerog
-    chmod +x zerog/zerog
-    sudo zerog/zerog
+    curl -O cybvik.xyz/files/zerog
+    chmod +x ./zerog
+    sudo ./zerog
 
 Customization
 -------------
@@ -24,7 +24,7 @@ AUR
 ---
 The usage of the AUR is highly discouraged by the Parabola developers.
 Therefore this script does not install an AUR helper. The git_install function
-does make it possible to install AUR packages, but I suggest you keep the 
+does make it possible to install AUR packages, but I suggest you keep the
 number low and check each PKGBUILD before adding it to the script.
 
 Contact
