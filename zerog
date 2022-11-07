@@ -26,7 +26,7 @@ error() { # Write to logfile and exit script
     printf "Error: $1\n"
     exit 1
 }
-prepare() { 
+prepare() {
     printf "Preparing...\n"
     printf "Refreshing keys...\n(This will take a while!)\n"
     # Refresh keyring and update keyrings
@@ -39,7 +39,7 @@ prepare() {
     pacman -S --noconfirm --needed git zsh ca-certificates >/dev/null 2>&1 ||
 	{ warning "Initial installs failed"; return 1; }
     # Enable parallel downloads and make pacman look nice
-    grep -q "ILoveCandy" /etc/pacman.conf || 
+    grep -q "ILoveCandy" /etc/pacman.conf ||
 	sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
     sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
 }
@@ -67,7 +67,7 @@ suckless() { # Clone and install suckless programs
 	printf "Installing $program\n"
 	sudo -u "$name" git clone "$giturl/$program-cybvik" >/dev/null 2>&1 ||
 	    { warning "Could not clone $program"; return 1; }
-	cd "$program" && make clean install >/dev/null 2>&1 || 
+	cd "$program" && make clean install >/dev/null 2>&1 ||
 	    { warning "Could not install $program"; return 1; }
     done
 }
@@ -96,8 +96,6 @@ follow_up() {
     rc-update add avahi-daemon default >/dev/null
     rc-update add cupsd default >/dev/null
     rc-update add tor default >/dev/null
-    # Make IBM Plex Mono the default monospace font
-    sed -i 's/Noto Sans Mono/IBM Plex Mono/g' /etc/fonts/conf.d/60-latin.conf
 }
 
 ### SCRIPT ###
