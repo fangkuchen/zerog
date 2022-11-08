@@ -27,6 +27,12 @@ Therefore this script does not install an AUR helper. The git_install function
 does make it possible to install AUR packages, but I suggest you keep the
 number low and check each PKGBUILD before adding it to the script.
 
+Troubleshooting
+---------------
+The script will create a logfile (/tmp/zerog.log). In case you run into any
+trouble you will find the stderror output of whatever command failed as well as
+the names of any programs that could not be installed there.
+
 Contact
 -------
 You can report issues and contributions to zerog@cybvik.xyz
