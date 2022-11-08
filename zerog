@@ -2,7 +2,7 @@
 
 ### VARIABLES ###
 
-name="$(logname)" #
+name="$(logname)"
 progs="git.cybvik.xyz/zerog/files/progs.list.html"
 dotfiles="git://git.cybvik.xyz/dotfiles"
 logfile="/tmp/zerog.log"
@@ -14,7 +14,7 @@ syntaxrepo="https://aur.archlinux.org/zsh-fast-syntax-highlighting.git"
 ### FUNCTIONS ###
 
 error() { # Write to logfile and exit script
-    printf "ERROR: $1\n" >> "$logfile"
+    printf "#######\n#ERROR#\n#######\n$1\n" >> "$logfile"
     clear
     printf "Error: $1\n"
     exit 1
