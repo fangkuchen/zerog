@@ -55,10 +55,10 @@ get_dotfiles() { # Download dotfiles and place them in $HOME
 
 suckless() { # Clone and install suckless programs
     printf "### Installing suckless software ###\n"
-    for program in dwm st dmenu slock surf; do
+    for program in dwm st dmenu; do
 	cd /home/"$name"/.local/src
 	printf "Installing $program\n"
-	sudo -u "$name" git clone "git://git.cybvik.xyz/$program-cybvik" >/dev/null 2>>"$logfile" || { error "Could not clone $program"; }
+	sudo -u "$name" git clone "git://git.cybvik.xyz/$program" >/dev/null 2>>"$logfile" || { error "Could not clone $program"; }
 	cd "$program" && make clean install >/dev/null 2>>"$logfile" || { error "Could not install $program"; }
     done
 }

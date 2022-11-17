@@ -57,6 +57,7 @@ openssh
 texlive-most
 unclutter
 pandoc
+mpop
 cups
 cups-openrc
 avahi
