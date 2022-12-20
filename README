@@ -11,7 +11,7 @@ Usage
 -----
 Install Parabola on your system then run:
 
-    curl -O cybvik.xyz/files/zerog
+    curl -O https://cybvik.xyz/zerog/zerog
     chmod +x ./zerog
     sudo ./zerog
 

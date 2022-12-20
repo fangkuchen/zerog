@@ -3,7 +3,7 @@
 ### VARIABLES ###
 
 name="$(logname)"
-progs="git.cybvik.xyz/zerog/files/progs.list.html"
+progs="git.cybvik.xyz/zerog/progs.list"
 dotfiles="git://git.cybvik.xyz/dotfiles"
 logfile="/tmp/zerog.log"
 suckless="git://git.suckless.org"
@@ -36,8 +36,7 @@ prepare() {
     sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
 
     # Get progs.list
-    cd /tmp && curl -O "$progs" && sed -i 's/<.*>//g; /.*Parabola.*/d; /^$/d' /tmp/progs.list.html || { error "Could not download progs.list"; }
-    mv /tmp/progs.list.html /tmp/progs.list
+    cd /tmp && curl -O "$progs" || { error "Could not download progs.list"; }
 }
 
 install_programs() { # Read from progs.list and install each entry
