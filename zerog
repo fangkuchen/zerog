@@ -64,9 +64,10 @@ suckless() { # Clone and install suckless programs
 }
 
 git_install() { # Basically a temporary AUR helper
-    sudo -u "$name" git clone "$2" /tmp/"$1" >/dev/null 2>>"$logfile" || { error "AUR: Could not clone from source ($2)"; }
-    cd /tmp/"$1"
-    yes | sudo -u "$name" LANG=C makepkg -si >/dev/null 2>>"$logfile" || { error "Could not makepkg $2"; }
+    prog_name="$(basename $1 .git)"
+    sudo -u "$name" git clone "$1" /tmp/"$prog_name" >/dev/null 2>>"$logfile" || { error "AUR: Could not clone from source ($prog_name)"; }
+    cd /tmp/"$prog_name"
+    yes | sudo -u "$name" LANG=C makepkg -si >/dev/null 2>>"$logfile" || { error "Could not makepkg $prog_name"; }
 }
 
 follow_up() {
