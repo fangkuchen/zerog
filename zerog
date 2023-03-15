@@ -3,8 +3,8 @@
 ### VARIABLES ###
 
 name="$(logname)"
-progs="git.cybvik.xyz/zerog/progs.list"
-dotfiles="git://git.cybvik.xyz/dotfiles"
+progs="git.hanetzok.net/zerog/progs.list"
+dotfiles="git://git.hanetzok.net/dotfiles"
 logfile="/tmp/zerog.log"
 suckless="git://git.suckless.org"
 
