@@ -3,7 +3,7 @@
 ### VARIABLES ###
 
 name="$(logname)"
-progs="git.hanetzok.net/zerog/progs.list"
+progs="https://hanetzok.net/zerog/progs.list"
 dotfiles="git://git.hanetzok.net/dotfiles"
 logfile="/tmp/zerog.log"
 suckless="git://git.hanetzok.net"
@@ -26,7 +26,7 @@ prepare() {
 
     # Refresh keyring and update keyrings
     pacman-key --refresh >/dev/null 2>>"$logfile" || { error "Could not refresh keys"; }
-    pacman -Sy --noconfirm archlinux-keyring archlinuxarm-keyring parabola-keyring >/dev/null 2>>"$logfile" || { error "Could not install keyrings"; }
+    pacman -Sy --noconfirm archlinux-keyring parabola-keyring >/dev/null 2>>"$logfile" || { error "Could not install keyrings"; }
 
     # Install some essential programs
     pacman -S --noconfirm --needed git zsh ca-certificates >/dev/null 2>>"$logfile" || { error "Initial installs failed"; }
