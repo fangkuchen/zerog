@@ -37,13 +37,17 @@ prepare() {
 
     # Get progs.list
     cd /tmp && curl -O "$progs" || { error "Could not download progs.list"; }
+
+    # Make user temporarily able to run sudo commands without entering password
+    trap 'rm -f /etc/sudoers.d/larbs-temp' HUP INT QUIT TERM PWR EXIT
+    echo "%wheel ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/larbs-temp
 }
 
 install_programs() { # Read from progs.list and install each entry
     printf "### Installing from progs.list ###\n"
     while read -r program; do
 	printf "Installing $program\n"
-        pacman -S --noconfirm --needed  "$program" >/dev/null 2>>"$logfile" || printf "WARN: $program could not be installed\n" >> "$logfile"
+	pacman -S --noconfirm --needed  "$program" >/dev/null 2>>"$logfile" || printf "WARN: $program could not be installed\n" >> "$logfile"
     done < /tmp/progs.list
 }
 
@@ -91,12 +95,15 @@ follow_up() {
     rc-update add avahi-daemon default >/dev/null
     rc-update add cupsd default >/dev/null
     rc-update add tor default >/dev/null
+
+    # Undo the temporary no-password workaround
+    rm /etc/sudoers.d/larbs-temp
 }
 
 ### SCRIPT ###
 
 printf "###########################\n########## ZEROG ##########\n###########\
-################\n"
+    ################\n"
 
 prepare
 
@@ -116,6 +123,6 @@ suckless
 follow_up
 
 printf "###########################\n########## ZEROG ##########\n###########\
-################\nZEROG flight finished. Log in again and run 'startx' to \
-start your new system\nIf you liked this script, want to report bugs/issues \
-or contribute to it, let me know via mail <zerog@cybvik.xyz>\n"
+    ################\nZEROG flight finished. Log in again and run 'startx' to \
+    start your new system\nIf you liked this script, want to report bugs/issues \
+	or contribute to it, let me know via mail <zerog@cybvik.xyz>\n"
