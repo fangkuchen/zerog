@@ -23,9 +23,7 @@ editing the corresponding variables at the beginning of the script
 AUR
 ---
 The usage of the AUR is highly discouraged by the Parabola developers.
-Therefore this script does not install an AUR helper. The git_install function
-does make it possible to install AUR packages, but I suggest you keep the
-number low and check each PKGBUILD before adding it to the script.
+
 
 Troubleshooting
 ---------------
