@@ -6,7 +6,7 @@ name="$(logname)"
 progs="git.hanetzok.net/zerog/progs.list"
 dotfiles="git://git.hanetzok.net/dotfiles"
 logfile="/tmp/zerog.log"
-suckless="git://git.suckless.org"
+suckless="git://git.hanetzok.net"
 
 # Repos for AUR programs
 mwrepo="https://aur.archlinux.org/mutt-wizard-git.git"
