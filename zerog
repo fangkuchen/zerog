@@ -55,16 +55,9 @@ suckless() { # Clone and install suckless programs
     for program in dwm st dmenu; do
 	cd /home/"$name"/.local/src
 	printf "Installing $program\n"
-	sudo -u "$name" git clone "$suckless/$program" >/dev/null 2>>"$logfile" || { error "Could not clone $program"; }
+	sudo -u "$name" git clone "$suckless"/"$program" >/dev/null 2>>"$logfile" || { error "Could not clone $program"; }
 	cd "$program" && make clean install >/dev/null 2>>"$logfile" || { error "Could not install $program"; }
     done
-}
-
-git_install() { # Basically a temporary AUR helper
-    prog_name="$(basename $1 .git)"
-    sudo -u "$name" git clone "$1" /tmp/"$prog_name" >/dev/null 2>>"$logfile" || { error "AUR: Could not clone from source ($prog_name)"; }
-    cd /tmp/"$prog_name"
-    yes | sudo -u "$name" LANG=C makepkg -si >/dev/null 2>>"$logfile" || { error "Could not makepkg $prog_name"; }
 }
 
 follow_up() {
@@ -102,13 +95,6 @@ install_programs
 get_dotfiles
 
 suckless
-
-# Git installs are disabled by default so you can choose if you want to install
-# these packages from the AUR
-#
-# for repo in "$mwrepo" "$syntaxrepo"; do
-#     git_install "$repo"
-# done
 
 follow_up
 
