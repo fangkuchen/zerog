@@ -25,6 +25,13 @@ AUR
 The usage of the AUR is highly discouraged by the Parabola developers.
 
 
+Issues
+------
+Due to a bug in the nonsystemd repo some programs that depend on pipewire/libpipewire
+won't install. So far, this affects mpd and mpv from this script. This is a known bug
+(see https://labs.parabola.nu/issues/3455) and is not the scripts fault.
+
+
 Troubleshooting
 ---------------
 The script will create a logfile (/tmp/zerog.log). In case you run into any
