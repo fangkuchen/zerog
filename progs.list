@@ -19,7 +19,7 @@ exfat-utils
 moreutils
 sxiv
 ffmpeg
-vim
+neovim
 mpd
 mpc
 mpv
