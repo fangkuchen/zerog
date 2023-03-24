@@ -3,6 +3,7 @@
 ### VARIABLES ###
 
 name="$(logname)"
+homedir="/home/$name"
 progs="https://hanetzok.net/zerog/progs.list"
 dotfiles="git://git.hanetzok.net/dotfiles"
 logfile="/tmp/zerog.log"
@@ -33,6 +34,9 @@ prepare() {
 
     # Get progs.list
     cd /tmp && curl -O "$progs" || { error "Could not download progs.list"; }
+
+    # Check for src dir and create if not found
+    [ -d "/home/$name/.local/src" ] || sudo -u "$name" mkdir -p /home/"$name"/.local/src
 }
 
 install_programs() { # Read from progs.list and install each entry
@@ -51,7 +55,6 @@ get_dotfiles() { # Download dotfiles and place them in $HOME
 
 suckless() { # Clone and install suckless programs
     printf "### Installing suckless software ###\n"
-    [ -d "/home/$name/.local/src" ] || su -u "$name" mkdir -p /home/"$name"/.local/src
     for program in dwm st dmenu; do
 	cd /home/"$name"/.local/src
 	printf "Installing $program\n"
