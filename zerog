@@ -6,7 +6,7 @@ name="$(logname)"
 homedir="/home/$name"
 progs="https://hanetzok.net/zerog/progs.list"
 dotfiles="git://git.hanetzok.net/dotfiles"
-logfile="/tmp/zerog.log"
+logfile="/var/log/zerog.log"
 suckless="git://git.hanetzok.net"
 
 ### FUNCTIONS ###
@@ -20,9 +20,10 @@ error() { # Write to logfile and exit script
 prepare() {
     printf "Preparing...\n"
     printf "Refreshing keys...\n(This will take a while!)\n"
+    printf "#############\n### zerog ###\n#############" > "$logfile"
 
     # Refresh keyring and update keyrings
-    pacman-key --refresh >/dev/null 2>>"$logfile" || { error "Could not refresh keys"; }
+    pacman-key --refresh >/dev/null 2>>"$logfile" || { error "Could not refresh keys. Please make sure you have root privileges"; }
     pacman -Sy --noconfirm archlinux-keyring parabola-keyring >/dev/null 2>>"$logfile" || { error "Could not install keyrings"; }
 
     # Install some essential programs
