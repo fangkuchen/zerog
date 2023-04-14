@@ -18,12 +18,11 @@ error() { # Write to logfile and exit script
     exit 1
 }
 prepare() {
-    printf "Preparing...\n"
-    printf "Refreshing keys...\n(This will take a while!)\n"
     printf "#############\n### zerog ###\n#############" > "$logfile"
+    printf "Preparing...\n"
+    printf "Refreshing keys...\n(This might take a while!)\n"
 
     # Refresh keyring and update keyrings
-    pacman-key --refresh >/dev/null 2>>"$logfile" || { error "Could not refresh keys. Please make sure you have root privileges"; }
     pacman -Sy --noconfirm archlinux-keyring parabola-keyring >/dev/null 2>>"$logfile" || { error "Could not install keyrings"; }
 
     # Install some essential programs
@@ -37,7 +36,7 @@ prepare() {
     cd /tmp && curl -O "$progs" || { error "Could not download progs.list"; }
 
     # Check for src dir and create if not found
-    [ -d "/$homedir/.local/src" ] || sudo -u "$name" mkdir -p /"$homedir"/.local/src
+    [ -d "$homedir/.local/src" ] || sudo -u "$name" mkdir -p "$homedir"/.local/src
 
 }
 
@@ -52,13 +51,16 @@ install_programs() { # Read from progs.list and install each entry
 get_dotfiles() { # Download dotfiles and place them in $HOME
     printf "### Installing dotfiles ###\n"
     sudo -u "$name" git clone "$dotfiles" /tmp/dotfiles >/dev/null 2>>"$logfile" || { error "Could not clone dotfiles"; }
-    sudo -u "$name" cp -rfT /tmp/dotfiles "/$homedir" >/dev/null 2>>"$logfile"
+    sudo -u "$name" cp -rfT /tmp/dotfiles "$homedir" >/dev/null 2>>"$logfile"
+    [ -d "$homedir/.git" ] && rm -rf "$homedir/.git"
+    [ -d "$homedir/.config/mpop" ] && rm -rf "$homedir/.config/mpop"
+    [ -d "$homedir/.config/msmtp" ] && rm -rf "$homedir/.msmtp"
 }
 
 suckless() { # Clone and install suckless programs
     printf "### Installing suckless software ###\n"
     for program in dwm st dmenu; do
-	cd /$homedir"/.local/src
+	cd "$homedir"/.local/src
 	printf "Installing $program\n"
 	sudo -u "$name" git clone "$suckless"/"$program" >/dev/null 2>>"$logfile" || { error "Could not clone $program"; }
 	cd "$program" && make clean install >/dev/null 2>>"$logfile" || { error "Could not install $program"; }
@@ -72,15 +74,15 @@ follow_up() {
     chsh -s /bin/zsh "$name" >/dev/null 2>>"$logfile"
 
     # Create some needed dirs
-    sudo -u "$name" mkdir -p "/$homedir/.cache/zsh/"
-    sudo -u "$name" mkdir -p "/$homedir/.config/mpd/playlists/"
+    sudo -u "$name" mkdir -p "$homedir/.cache/zsh/"
+    sudo -u "$name" mkdir -p "$homedir/.config/mpd/playlists/"
 
     # Turn off the computer beep
     rmmod pcspkr
     printf "blacklist pcspkr\n" >/etc/modprobe.d/nobeep.conf
 
     # Get rid of no longer needed bash files
-    yes | rm /$homedir/.bash*
+    yes | rm $homedir/.bash*
 
     # Add some services to default runtime
     rc-update add avahi-daemon default >/dev/null
@@ -89,9 +91,8 @@ follow_up() {
 }
 
 ### SCRIPT ###
-
-printf "###########################\n########## ZEROG ##########\n###########\
-    ################\n"
+clear
+printf "###########################\n########## ZEROG ##########\n###########################\n"
 
 prepare
 
